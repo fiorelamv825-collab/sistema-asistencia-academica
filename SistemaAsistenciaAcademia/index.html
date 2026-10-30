@@ -1,0 +1,242 @@
+html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia - Control de Asistencia</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <div class="logo-icon">A</div>
+        <div>
+            <h2>ACADEMIA</h2>
+            <span>Panel administrativo</span>
+        </div>
+    </div>
+
+    <p class="menu-label">MENÚ PRINCIPAL</p>
+
+    <button class="nav active" onclick="mostrar('inicio',this)">
+        <span>⌂</span> Inicio
+    </button>
+
+    <button class="nav" onclick="mostrar('salones',this)">
+        <span>▣</span> Consultar salón
+    </button>
+
+    <button class="nav" onclick="mostrar('asistencia',this)">
+        <span>▤</span> Consultar asistencia
+    </button>
+
+    <button class="nav" onclick="mostrar('registro',this)">
+        <span>✓</span> Registrar asistencia
+    </button>
+
+    <button class="nav" onclick="mostrar('estudiantes',this)">
+        <span>♙</span> Estudiantes
+    </button>
+
+    <div class="sidebar-bottom">
+        <div class="user">
+            <div class="avatar">AD</div>
+            <div>
+                <strong>Administrador</strong>
+                <small>Control académico</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="contenido">
+
+    <header class="topbar">
+        <div>
+            <h1 id="titulo">Panel principal</h1>
+            <p>Academia preuniversitaria / Sistema de asistencia</p>
+        </div>
+        <div class="fecha" id="fecha"></div>
+    </header>
+
+    <!-- INICIO -->
+    <section id="inicio" class="pagina activa">
+        <div class="bienvenida">
+            <div>
+                <span class="etiqueta">SISTEMA DE GESTIÓN</span>
+                <h2>Bienvenido al sistema</h2>
+                <p>Administra estudiantes y controla sus asistencias fácilmente.</p>
+            </div>
+            <div class="bienvenida-icon">🎓</div>
+        </div>
+
+        <div class="estadisticas">
+            <div class="card-stat">
+                <div class="stat-icon azul">♙</div>
+                <div><p>Estudiantes matriculados</p><h2 id="total">3</h2></div>
+            </div>
+            <div class="card-stat">
+                <div class="stat-icon verde">✓</div>
+                <div><p>Asistencias registradas</p><h2 id="totalAsistencias">0</h2></div>
+            </div>
+            <div class="card-stat">
+                <div class="stat-icon naranja">◷</div>
+                <div><p>Tardanzas</p><h2 id="totalTardanzas">0</h2></div>
+            </div>
+            <div class="card-stat">
+                <div class="stat-icon rojo">!</div>
+                <div><p>Faltas</p><h2 id="totalFaltas">0</h2></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">
+                <div>
+                    <h3>Accesos rápidos</h3>
+                    <p>Selecciona una operación para continuar.</p>
+                </div>
+            </div>
+
+            <div class="accesos">
+                <button onclick="mostrar('salones')">
+                    <span>▣</span>
+                    <strong>Consultar salón</strong>
+                    <small>Buscar el salón por código</small>
+                </button>
+                <button onclick="mostrar('asistencia')">
+                    <span>▤</span>
+                    <strong>Consultar asistencia</strong>
+                    <small>Revisar faltas y tardanzas</small>
+                </button>
+                <button onclick="mostrar('registro')">
+                    <span>✓</span>
+                    <strong>Registrar asistencia</strong>
+                    <small>Registrar a los estudiantes</small>
+                </button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Últimos estudiantes registrados</h3>
+            <div class="tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CÓDIGO</th>
+                            <th>ESTUDIANTE</th>
+                            <th>SALÓN</th>
+                            <th>ASISTENCIAS</th>
+                            <th>FALTAS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaInicio"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONSULTAR SALÓN -->
+    <section id="salones" class="pagina">
+        <div class="panel">
+            <h3>Consultar salón</h3>
+            <p>Ingresa el código del estudiante para conocer su salón.</p>
+
+            <div class="busqueda">
+                <input id="codigoSalon" placeholder="Ejemplo: B004-03481">
+                <button onclick="consultarSalon()">Buscar estudiante</button>
+            </div>
+
+            <div id="resultadoSalon" class="resultado oculto"></div>
+        </div>
+    </section>
+
+    <!-- CONSULTAR ASISTENCIA -->
+    <section id="asistencia" class="pagina">
+        <div class="panel">
+            <h3>Consultar asistencia</h3>
+            <p>Consulta el historial de asistencia mediante el código.</p>
+
+            <div class="busqueda">
+                <input id="codigoAsistencia" placeholder="Código del estudiante">
+                <button onclick="consultarAsistencia()">Consultar</button>
+            </div>
+
+            <div id="resultadoAsistencia" class="resultado oculto"></div>
+        </div>
+    </section>
+
+    <!-- REGISTRAR -->
+    <section id="registro" class="pagina">
+        <div class="panel">
+            <h3>Registrar asistencia</h3>
+            <p>Agrega al estudiante a la cola de atención.</p>
+
+            <div class="busqueda">
+                <input id="codigoRegistro" placeholder="Código del estudiante">
+                <button onclick="agregarCola()">Agregar a la cola</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">
+                <div>
+                    <h3>Cola de atención</h3>
+                    <p>Los estudiantes serán atendidos en orden de llegada.</p>
+                </div>
+                <span class="contador" id="pendientes">0 pendientes</span>
+            </div>
+
+            <div id="listaCola" class="lista-cola">
+                <p class="vacio">No hay estudiantes en espera.</p>
+            </div>
+
+            <button class="btn-principal" onclick="atender()">Atender siguiente estudiante</button>
+
+            <div id="formAtencion" class="atencion oculto">
+                <h4 id="nombreAtencion"></h4>
+                <p>Selecciona el estado de asistencia:</p>
+                <div class="opciones">
+                    <button onclick="registrarEstado(1)">Asistencia</button>
+                    <button onclick="registrarEstado(2)">Tardanza</button>
+                    <button onclick="registrarEstado(3)">Falta</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ESTUDIANTES -->
+    <section id="estudiantes" class="pagina">
+        <div class="panel">
+            <h3>Estudiantes matriculados</h3>
+            <p>Listado general de estudiantes registrados.</p>
+
+            <div class="busqueda">
+                <input id="filtro" placeholder="Buscar por código o nombre"
+                       oninput="mostrarTabla()">
+            </div>
+
+            <div class="tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CÓDIGO</th>
+                            <th>NOMBRE</th>
+                            <th>SALÓN</th>
+                            <th>ASISTENCIAS</th>
+                            <th>TARDANZAS</th>
+                            <th>FALTAS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEstudiantes"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
